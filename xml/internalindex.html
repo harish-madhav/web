@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Reads the XML data using JavaScript</title>
+
+    <!-- CSS -->
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #7ce2af
+        }
+
+        th {
+            background-color: #7c0f65;
+            color: white;
+        }
+
+        .button {
+            position: relative;
+            text-align: center;
+            padding: 20px;
+            border: 4px solid rgb(55, 12, 211);
+            background: rgba(20, 192, 4, 0.5);
+            color: rgb(230, 36, 78);
+            outline: none;
+            border-radius: 30px;
+            font-size: 30px;
+            width: 500px;
+
+        }
+
+        .button:hover {
+            color: black;
+            background: white;
+        }
+    </style>
+
+    <!--JavaScript-->
+    <script>
+        function empDetails() {
+            let i;
+            let xmlString = '<employees>'+
+                '<employee id="be130"><firstname>Amit</firstname><lastname>Kumar</lastname><title>Accountant</title><division>Accts Payable</division><building>326</building><room>14</room></employee>'+
+                '<employee id="be131"><firstname>Akash</firstname><lastname>Kumar</lastname><title>Engineering Manager</title><division>Materials</division><building>327</building><room>21</room></employee>'+
+                '<employee id="be132"><firstname>Aishwarya</firstname><lastname>Kulshrestha</lastname><title>Engineer</title><division>Materials</division><building>327</building><room>22</room></employee>'+
+                '<employee id="be133">       <firstname>Sachin</firstname>        <lastname>Kumar</lastname>        <title>Engineer</title>        <division>Materials</division>        <building>327</building>        <room>24</room>    </employee>'+
+                '<employee id="be135">        <firstname>Vikash</firstname>        <lastname>kumar</lastname>        <title>COO</title>        <division>Management</division>        <building>216</building>        <room>26</room>    </employee>'+
+                '<employee id="be136">        <firstname>Suvam</firstname>        <lastname>Basak</lastname>        <title>Accountant</title>        <division>Accts Payable</division>        <building>326</building>        <room>30</room>    </employee>'+
+                '<employee id="be135">        <firstname>Abhinav</firstname>        <lastname>kumar</lastname>        <title>COO</title>        <division>Management</division>        <building>216</building>        <room>32</room>    </employee>'+
+                '<employee id="be131">        <firstname>DhanPal</firstname>        <lastname>Singh</lastname>        <title>Engineering Manager</title>        <division>Materials</division>        <building>327</building>        <room>21</room>    </employee>'+
+                '</employees>';
+
+            let parser = new DOMParser();
+            let xmlDoc = parser.parseFromString(xmlString, "text/xml");
+            let table =
+                `<tr><th>Firstname</th><th>Lastname</th>
+                    <th>Title</th><th>Division</th>
+                    <th>Building</th><th>Room</th>
+                </tr>`;
+                
+            let x = xmlDoc.getElementsByTagName("employee");
+
+            // Start to fetch the data by using TagName 
+            for (i = 0; i < x.length; i++) {
+                table += "<tr><td>" +
+                    x[i].getElementsByTagName("firstname")[0]
+                        .childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("lastname")[0]
+                        .childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("title")[0]
+                        .childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("division")[0]
+                        .childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("building")[0]
+                        .childNodes[0].nodeValue + "</td><td>" +
+                    x[i].getElementsByTagName("room")[0]
+                        .childNodes[0].nodeValue + "</td></tr>";
+            }
+
+            // Print the xml data in table form
+            document.getElementById("id").innerHTML = table;
+        }
+    </script>
+</head>
+
+<body>
+    <center>
+        <button type="button" class="button" onclick="empDetails()">
+            Get Employees Details
+        </button>
+    </center>
+
+    <br><br>
+    <table id="id"></table>
+</body>
+
+</html>

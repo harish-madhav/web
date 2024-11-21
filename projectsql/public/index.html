@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link rel="stylesheet" href="1.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+</head>
+
+<body ng-app="app" ng-controller="ctrl">
+    <form name="form" ng-submit="submit()">
+        <fieldset>
+            <legend>Student Details</legend>
+
+            <label>Student Name:</label>
+            <input type="text" name="name" ng-model="student.name" placeholder="Name" ng-minlength="6" required>
+            <div class="error_messages" ng-show="form.name.$dirty && form.name.$invalid">
+                <span ng-show="form.name.$error.required">Name is required</span>
+                <span ng-show="form.name.$error.minlength">Name is too short</span>
+            </div>
+            <br>
+
+            <label>Student ID:</label>
+            <input type="text" name="id" ng-model="student.id" placeholder="ID" ng-minlength="7" ng-maxlength="7"
+                required>
+            <div class="error_messages" ng-show="form.id.$dirty && form.id.$invalid">
+                <span ng-show="form.id.$error.required">ID is required</span>
+                <span ng-show="form.id.$error.minlength || form.id.$error.maxlength">ID must be 7 characters long</span>
+            </div>
+            <br>
+
+            <label>Gender:</label>
+            <input type="radio" name="gender" ng-model="student.gender" value="male"> Male
+            <input type="radio" name="gender" ng-model="student.gender" value="female"> Female
+            <br>
+
+            <label>Student Email:</label>
+            <input type="email" name="mail" ng-model="student.mail" placeholder="Email" required>
+            <div class="error_messages" ng-show="form.mail.$dirty && form.mail.$invalid">
+                <span ng-show="form.mail.$error.required">Email is required</span>
+                <span ng-show="form.mail.$error.email">Email is invalid</span>
+            </div>
+            <br>
+
+            <label>Student Branch:</label>
+            <input type="text" name="branch" ng-model="student.branch" placeholder="Branch" required>
+            <div class="error_messages" ng-show="form.branch.$dirty && form.branch.$invalid">
+                <span ng-show="form.branch.$error.required">Branch is required</span>
+            </div>
+            <br>
+
+            <label>Student City:</label>
+            <input type="text" name="city" ng-model="student.city" placeholder="City" required>
+            <div class="error_messages" ng-show="form.city.$dirty && form.city.$invalid">
+                <span ng-show="form.city.$error.required">City is required</span>
+            </div>
+            <br>
+
+            <label>Year of Joining:</label>
+            <input type="text" name="year" ng-model="student.year" placeholder="Year" required>
+            <div class="error_messages" ng-show="form.year.$dirty && form.year.$invalid">
+                <span ng-show="form.year.$error.required">Year of joining is required</span>
+            </div>
+            <br>
+
+            <label>Current Year:</label>
+            <select name="current" ng-model="student.current" required>
+                <option value="" disabled>Select Current Year</option>
+                <option value="I">I year</option>
+                <option value="II">II year</option>
+                <option value="III">III year</option>
+                <option value="IV">IV year</option>
+            </select>
+            <div class="error_messages" ng-show="form.current.$dirty && form.current.$invalid">
+                <span ng-show="form.current.$error.required">Current year is required</span>
+            </div>
+            <br>
+
+            <button type="submit" ng-disabled="form.$invalid">Submit</button>
+        </fieldset>
+    </form>
+
+    <h2>Show</h2>
+    <form ng-submit="show()">
+        <button type="submit">Show</button>
+        <br>
+        <table border="1" ng-show="show1">
+            <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Branch</th>
+                <th>City</th>
+                <th>Year of Joining</th>
+                <th>Current Year</th>
+            </tr>
+            <tr ng-repeat="x in list">
+                <td>{{x.name}}</td>
+                <td>{{x.id}}</td>
+                <td>{{x.gender}}</td>
+                <td>{{x.mail}}</td>
+                <td>{{x.branch}}</td>
+                <td>{{x.city}}</td>
+                <td>{{x.year}}</td>
+                <td>{{x.current}}</td>
+            </tr>
+        </table>
+    </form>
+
+    <h2>Update</h2>
+    <form ng-submit="update()">
+        <label>ID:</label>
+        <input type="text" ng-model="updates.id" required>
+        <br><br>
+        <label>Email:</label>
+        <input type="email" ng-model="updates.mail" required>
+        <br><br>
+        <button type="submit">Update</button>
+    </form>
+
+    <h2>Delete</h2>
+    <form ng-submit="delete()">
+        <label>ID:</label>
+        <input type="text" ng-model="deletes.id" required>
+        <br><br>
+        <button type="submit">Delete</button>
+    </form>
+
+    <h2>Search</h2>
+    <form ng-submit="search()">
+        <label>ID:</label>
+        <input type="text" ng-model="id1" required>
+        <br><br>
+        <button type="submit">Search</button>
+        <br><br>
+        <table border="1" ng-show="show2">
+            <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Branch</th>
+                <th>City</th>
+                <th>Year of Joining</th>
+                <th>Current Year</th>
+            </tr>
+            <tr ng-repeat="x in list | filter:{id: id1}">
+                <td>{{x.name}}</td>
+                <td>{{x.id}}</td>
+                <td>{{x.gender}}</td>
+                <td>{{x.mail}}</td>
+                <td>{{x.branch}}</td>
+                <td>{{x.city}}</td>
+                <td>{{x.year}}</td>
+                <td>{{x.current}}</td>
+            </tr>
+        </table>
+    </form>
+
+    <script>
+        var app = angular.module("app", ['ngAnimate']);
+
+        // Factory definition
+        app.factory("service1", function ($http) {
+            return {
+                submit: function (st) {
+                    return $http.post("http://localhost:3000/register", st);
+                },
+                show: function () {
+                    return $http.get("http://localhost:3000/fetch");
+                },
+                delete: function (st1) {
+                    return $http.post("http://localhost:3000/deletes", st1);
+                },
+                update: function (st2) {
+                    return $http.post("http://localhost:3000/updates", st2);
+                }
+            };
+        });
+
+        app.controller('ctrl', function ($scope, service1) {
+            $scope.student = {};
+            $scope.updates = {};
+            $scope.deletes = {};
+            $scope.list = [];
+            $scope.list1 = [];
+
+            $scope.submit = function () {
+                service1.submit($scope.student).then(function (res) {
+                    console.log("Result submit: " + res.data);
+                    $scope.student = {};  // Reset form after submission
+                }).catch(function (err) {
+                    console.log("Error: " + err);
+                });
+            };
+
+            $scope.show = function () {
+                service1.show().then(function (res) {
+                    console.log("Result show: " + res.data);
+                    $scope.list = res.data;
+                    $scope.show1 = true;
+                }).catch(function (err) {
+                    console.log("Error: " + err);
+                });
+            };
+
+            $scope.update = function () {
+                service1.update($scope.updates).then(function (res) {
+                    console.log("Result update: " + res.data);
+                    $scope.updates = {};  // Reset update fields after submission
+                }).catch(function (err) {
+                    console.log("Error: " + err);
+                });
+            };
+
+            $scope.delete = function () {
+                service1.delete($scope.deletes).then(function (res) {
+                    console.log("Result delete: " + res.data);
+                    $scope.deletes = {};  // Reset delete fields after submission
+                }).catch(function (err) {
+                    console.log("Error: " + err);
+                });
+            };
+
+            $scope.search = function () {
+                // You can implement the search logic here
+                $scope.show2 = true; // Show the search results
+            };
+        });
+    </script>
+</body>
+
+</html>

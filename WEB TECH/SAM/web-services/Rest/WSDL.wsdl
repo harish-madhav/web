@@ -1,0 +1,29 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" 
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             targetNamespace="http://example.com/wsdl">
+    <message name="AddRequest">
+        <part name="intA" type="xsd:int"/>
+        <part name="intB" type="xsd:int"/>
+    </message>
+    <message name="AddResponse">
+        <part name="result" type="xsd:int"/>
+    </message>
+    <portType name="CalculatorPortType">
+        <operation name="Add">
+            <input message="AddRequest"/>
+            <output message="AddResponse"/>
+        </operation>
+    </portType>
+    <binding name="CalculatorBinding" type="CalculatorPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="Add">
+            <soap:operation soapAction="http://example.com/Add"/>
+            <input>
+                <soap:body use="encoded" namespace="http://example.com/wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://example.com/wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+</definitions>

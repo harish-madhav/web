@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="travelApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Booking Platform</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="a1.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="TravelController as travelCtrl">
+        <h1>Travel Booking Platform</h1>
+
+        <h3>Available Travel Packages</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Flight Details</th>
+                    <th>Hotel Options</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="package in travelCtrl.packages">
+                    <td>{{ package.name }}</td>
+                    <td>{{ package.flightDetails }}</td>
+                    <td>{{ package.hotelOptions }}</td>
+                    <td>{{ package.price | currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-container">
+            <h3>Check Availability</h3>
+            <form ng-submit="travelCtrl.checkAvailability()">
+                <label for="packageName">Package Name:</label>
+                <select id="packageName" ng-model="travelCtrl.selectedPackage" ng-options="package.name for package in travelCtrl.packages" required>
+                    <option value="">Select a package</option>
+                </select>
+
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" ng-model="travelCtrl.startDate" required />
+
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" ng-model="travelCtrl.endDate" required />
+
+                <button type="submit">Check Availability</button>
+            </form>
+
+            <p ng-if="travelCtrl.availabilityMessage">{{ travelCtrl.availabilityMessage }}</p>
+        </div>
+    </div>
+</body>
+</html>

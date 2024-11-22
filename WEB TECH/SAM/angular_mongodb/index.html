@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" ng-controller="StudentController">
+        <h1>Student Management</h1>
+
+        <!-- Form -->
+        <form ng-submit="addStudent()">
+            <input type="text" ng-model="newStudent.name" placeholder="Name" required>
+            <input type="text" ng-model="newStudent.gender" placeholder="Gender" required>
+            <input type="number" ng-model="newStudent.grade" placeholder="Grade" required>
+            <button type="submit">Add Student</button>
+        </form>
+
+        <!-- Text-based Filter -->
+        <input type="text" ng-model="nameFilter" placeholder="Filter by Name" />
+
+        <!-- Student List -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="student in students | filter:{name: nameFilter}">
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.grade }}</td>
+                    <td>
+                        <button class="delete-btn" ng-click="deleteStudent(student._id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const app = angular.module('studentApp', []);
+
+        app.controller('StudentController', ($scope, $http) => {
+            $scope.students = [];
+            $scope.newStudent = {};
+            $scope.nameFilter = "";
+
+            // Fetch all students
+            $scope.getStudents = function () {
+                $http.get("http://localhost:3001/students").then(
+                    (response) => {
+                        $scope.students = response.data;
+                    },
+                    (error) => {
+                        console.error("Error fetching students:", error);
+                    }
+                );
+            };
+
+            // Add a student
+            $scope.addStudent = function () {
+                $http.post("http://localhost:3001/students", $scope.newStudent).then(
+                    (response) => {
+                        alert(response.data.message);
+                        $scope.newStudent = {};
+                        $scope.getStudents();
+                    },
+                    (error) => {
+                        console.error("Error adding student:", error);
+                    }
+                );
+            };
+
+            // Delete a student
+            $scope.deleteStudent = function (id) {
+                $http.delete(`http://localhost:3001/students/${id}`).then(
+                    (response) => {
+                        alert(response.data.message);
+                        $scope.getStudents();
+                    },
+                    (error) => {
+                        console.error("Error deleting student:", error);
+                    }
+                );
+            };
+
+            // Initial fetch of students
+            $scope.getStudents();
+        });
+    </script>
+</body>
+
+</html>

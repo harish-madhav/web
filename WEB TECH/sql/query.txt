@@ -1,0 +1,8 @@
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,     -- Unique identifier for each booking
+  name VARCHAR(255) NOT NULL,            -- Customer's name
+  email VARCHAR(255) NOT NULL,           -- Customer's email address
+  phone VARCHAR(20) NOT NULL,            -- Customer's phone number
+  date DATE NOT NULL,                    -- Booking date
+  status ENUM('Pending', 'Confirmed', 'Cancelled') NOT NULL -- Booking status
+);

@@ -1,0 +1,17 @@
+Tools You’ll Need:
+SOAP:
+
+SoapUI
+Postman
+WSDL:
+
+SoapUI or online tools like WSDL Viewer.
+RDF:
+
+Apache Jena
+RSS:
+
+RSS readers like Feedly or browser plugins.
+REST:
+
+Postman or browser extensions like RestClient.

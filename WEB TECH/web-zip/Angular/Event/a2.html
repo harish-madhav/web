@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eventApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="a2.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="EventController as eventCtrl">
+        <h1>Upcoming Events</h1>
+
+        <label for="currency">Select Currency:</label>
+        <select id="currency" ng-model="currency" ng-options="cur for cur in eventCtrl.currencies">
+        </select>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Ticket Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="event in eventCtrl.events">
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.location }}</td>
+                    <td>{{ event.price | currency:currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

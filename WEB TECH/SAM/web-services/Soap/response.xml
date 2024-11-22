@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <AddResponse xmlns="http://tempuri.org/">
+         <AddResult>15</AddResult>
+      </AddResponse>
+   </soap:Body>
+</soap:Envelope>

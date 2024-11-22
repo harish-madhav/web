@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Features</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .filter-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" ng-controller="StudentController">
+        <h1>Student Management System</h1>
+
+        <!-- Form -->
+        <form ng-submit="addStudent()" name="studentForm">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" ng-model="newStudent.name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <select ng-model="newStudent.gender" required>
+                    <option value="" disabled>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Grade:</label>
+                <input type="number" ng-model="newStudent.grade" required>
+            </div>
+
+            <button type="submit" ng-disabled="studentForm.$invalid">Add Student</button>
+        </form>
+
+        <!-- Filters -->
+    <div class="filter-section">
+    <label>Filter by Name or Gender:</label>
+    <input type="text" ng-model="searchText" placeholder="Type to search...">
+    </div>
+
+<!-- Student List -->
+    <h2>Student List</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Grade</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="student in students | filter:searchText | orderBy:'grade'">
+            <td>{{ student.name }}</td>
+            <td>{{ student.gender }}</td>
+            <td>{{ student.grade }}</td>
+            <td>
+                <button class="delete-btn" ng-click="deleteStudent($index)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+
+    </div>
+
+    <script>
+        // Define the AngularJS app
+        const app = angular.module('studentApp', []);
+
+        // Factory for managing students
+        app.factory('StudentFactory', function () {
+            const students = [];
+            return {
+                getStudents: function () {
+                    return students;
+                },
+                addStudent: function (student) {
+                    students.push(student);
+                },
+                deleteStudent: function (index) {
+                    students.splice(index, 1);
+                }
+            };
+        });
+
+        // Service for custom operations (e.g., filtering)
+        app.service('StudentService', function () {
+            this.getAverageGrade = function (students) {
+                const total = students.reduce((sum, student) => sum + student.grade, 0);
+                return (students.length > 0) ? (total / students.length).toFixed(2) : 0;
+            };
+        });
+
+        // Directive to display average grade
+        app.directive('averageGrade', function (StudentService) {
+            return {
+                restrict: 'E',
+                scope: {
+                    students: '='
+                },
+                template: `<p>Average Grade: {{ average }}</p>`,
+                link: function (scope) {
+                    scope.$watch('students', function (newVal) {
+                        scope.average = StudentService.getAverageGrade(newVal);
+                    }, true);
+                }
+            };
+        });
+
+        // Main controller
+        app.controller('StudentController', function ($scope, StudentFactory) {
+            // Data Binding with scope
+            $scope.students = StudentFactory.getStudents();
+            $scope.newStudent = {};
+            $scope.genderFilter = '';
+
+            // Add a new student
+            $scope.addStudent = function () {
+                StudentFactory.addStudent($scope.newStudent);
+                $scope.newStudent = {}; // Clear form
+            };
+
+            // Delete a student
+            $scope.deleteStudent = function (index) {
+                StudentFactory.deleteStudent(index);
+            };
+        });
+    </script>
+</body>
+
+</html>

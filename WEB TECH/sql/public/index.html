@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bookingApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Booking Management Application</h1>
+  <div ng-controller="bookingController">
+    <form ng-submit="submitBooking()">
+      <input type="text" ng-model="booking.name" placeholder="Name" required />
+      <input type="email" ng-model="booking.email" placeholder="Email" required />
+      <input type="text" ng-model="booking.phone" placeholder="Phone" required />
+      <input type="date" ng-model="booking.date" placeholder="Date" required />
+      <select ng-model="booking.status" required>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+      <button type="submit">{{ isEditing ? 'Update Booking' : 'Add Booking' }}</button>
+    </form>
+
+    <h2>Booking List</h2>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      <tr ng-repeat="booking in bookings | bookingFilter:searchQuery">
+        <td>{{ booking.name }}</td>
+        <td>{{ booking.email }}</td>
+        <td>{{ booking.phone }}</td>
+        <td>{{ booking.date | date:'yyyy-MM-dd' }}</td>
+        <td>{{ booking.status }}</td>
+        <td>
+          <button ng-click="editBooking(booking)">Edit</button>
+          <button ng-click="deleteBooking(booking.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+    <input type="text" ng-model="searchQuery" placeholder="Search bookings..." />
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
